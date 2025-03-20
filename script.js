@@ -156,11 +156,7 @@ function showInstallButton() {
 // Añade un botón de instalación manual para forzar la prueba
 
 
-// Ejecutar después de cargar la página
-window.addEventListener('load', () => {
-  // Añadir botón de depuración después de 2 segundos
-  setTimeout(addDebugInstallButton, 2000);
-});
+
 
 // Log when the app is installed
 window.addEventListener('appinstalled', (evt) => {
