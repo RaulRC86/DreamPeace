@@ -1,13 +1,13 @@
 {
     "name": "DreamPeace",
     "short_name": "Alarma",
-    "start_url": "/index.html",
+    "start_url": "/DreamPeace/index.html",
     "display": "standalone",
     "background_color": "#1a1a1a",
     "theme_color": "#1a1a1a",
     "icons": [
       {
-        "src": "logoDP.png",
+        "src": "/DreamPeace/logoDP.png",
         "sizes": "192x192",
         "type": "image/png"
       }
