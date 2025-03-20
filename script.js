@@ -63,3 +63,39 @@ function updateClock() {
       .then(() => console.log('Service Worker registrado'))
       .catch(err => console.error('Error al registrar SW:', err));
   }
+
+  let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  console.log('Evento beforeinstallprompt capturado');
+  showInstallButton();
+});
+
+function showInstallButton() {
+  const installButton = document.createElement('button');
+  installButton.textContent = 'Instalar Despertador';
+  installButton.style.position = 'fixed';
+  installButton.style.bottom = '10px';
+  installButton.style.right = '10px';
+  installButton.style.backgroundColor = '#444';
+  installButton.style.color = '#e0e0e0';
+  installButton.style.border = 'none';
+  installButton.style.padding = '8px 16px';
+  installButton.style.cursor = 'pointer';
+  installButton.addEventListener('click', () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log('Usuario aceptó instalar la PWA');
+        } else {
+          console.log('Usuario rechazó instalar la PWA');
+        }
+        deferredPrompt = null;
+      });
+    }
+  });
+  document.body.appendChild(installButton);
+}
