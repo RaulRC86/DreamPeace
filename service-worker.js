@@ -1,5 +1,5 @@
 // Cache name - cambia la versión para forzar actualización
-const CACHE_NAME = 'dreampeace-v2'; // Incrementa la versión
+const CACHE_NAME = 'dreampeace-v3'; // Incrementado a v3
 
 // Files to cache
 const urlsToCache = [

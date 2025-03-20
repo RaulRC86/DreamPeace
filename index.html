@@ -11,6 +11,31 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="logoDP.png">
+  <script>
+    // Eliminar botones de depuración inmediatamente
+    (function() {
+      function removeDebugButton() {
+        console.log('Buscando botones de depuración...');
+        document.querySelectorAll('button').forEach(button => {
+          if (button.textContent.includes('Forzar') || 
+              button.textContent.includes('Debug') || 
+              button.textContent.includes('Depuración')) {
+            console.log('Botón de depuración encontrado y eliminado');
+            button.remove();
+          }
+        });
+      }
+      
+      // Ejecutar inmediatamente
+      removeDebugButton();
+      
+      // Ejecutar después de cargar
+      window.addEventListener('load', removeDebugButton);
+      
+      // Ejecutar periódicamente
+      setInterval(removeDebugButton, 1000);
+    })();
+  </script>
 </head>
 <body>
   <div class="container">
