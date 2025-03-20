@@ -2,19 +2,20 @@
     "name": "Despertador",
     "short_name": "Alarma",
     "description": "Una aplicación simple de alarma para despertar a tiempo",
-    "start_url": "./index.html",
-    "scope": "./",
+    "id": "/DreamPeace/",
+    "start_url": "/DreamPeace/",
+    "scope": "/DreamPeace/",
     "display": "standalone",
     "background_color": "#1a1a1a",
     "theme_color": "#1a1a1a",
     "icons": [
       {
-        "src": "./logoDP.png",
+        "src": "/DreamPeace/logoDP.png",
         "sizes": "192x192",
         "type": "image/png"
       },
       {
-        "src": "./logoDP.png",
+        "src": "/DreamPeace/logoDP.png",
         "sizes": "512x512",
         "type": "image/png",
         "purpose": "any maskable"

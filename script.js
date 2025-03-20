@@ -1,3 +1,10 @@
+// Añade estos logs al inicio del archivo
+console.log('Verificando estado de PWA:');
+console.log('- URL actual:', window.location.href);
+console.log('- ¿Está en modo standalone?', window.matchMedia('(display-mode: standalone)').matches);
+console.log('- ¿Service Worker soportado?', 'serviceWorker' in navigator);
+console.log('- ¿Notificaciones soportadas?', 'Notification' in window);
+
 // Variables for the alarm
 let alarmaTime = null;
 let alarmaActiva = false;
@@ -77,41 +84,62 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-// Handle PWA installation
+// Mejora el manejo del evento beforeinstallprompt
 window.addEventListener('beforeinstallprompt', (e) => {
   // Prevent Chrome 67 and earlier from automatically showing the prompt
   e.preventDefault();
   // Store the event so it can be triggered later
   deferredPrompt = e;
-  console.log('Evento beforeinstallprompt capturado');
+  console.log('✅ Evento beforeinstallprompt capturado');
+  console.log('Detalles del evento:', e);
   
   // Show the install button
   showInstallButton();
 });
 
+// Mejora la función showInstallButton para forzar la visualización del botón
 function showInstallButton() {
-  // Check if the button already exists
-  if (document.querySelector('.install-btn')) return;
+  console.log('Intentando mostrar el botón de instalación...');
+  
+  // Eliminar botón existente si hay alguno
+  const existingButton = document.querySelector('.install-btn');
+  if (existingButton) {
+    existingButton.remove();
+    console.log('Botón existente eliminado');
+  }
   
   const installButton = document.createElement('button');
   installButton.textContent = 'Instalar Despertador';
   installButton.className = 'install-btn';
+  installButton.style.position = 'fixed';
+  installButton.style.bottom = '20px';
+  installButton.style.right = '20px';
+  installButton.style.backgroundColor = '#444';
+  installButton.style.color = '#e0e0e0';
+  installButton.style.border = 'none';
+  installButton.style.padding = '10px 16px';
+  installButton.style.borderRadius = '4px';
+  installButton.style.cursor = 'pointer';
+  installButton.style.zIndex = '9999'; // Asegura que esté por encima de todo
   
   installButton.addEventListener('click', () => {
+    console.log('Botón de instalación clickeado');
     if (!deferredPrompt) {
-      console.log('No hay prompt de instalación disponible');
+      console.log('❌ No hay prompt de instalación disponible');
+      alert('No se puede instalar la aplicación en este momento. Asegúrate de que no esté ya instalada.');
       return;
     }
     
     // Show the install prompt
     deferredPrompt.prompt();
+    console.log('Prompt de instalación mostrado al usuario');
     
     // Wait for the user to respond to the prompt
     deferredPrompt.userChoice.then((choiceResult) => {
       if (choiceResult.outcome === 'accepted') {
-        console.log('Usuario aceptó instalar la PWA');
+        console.log('✅ Usuario aceptó instalar la PWA');
       } else {
-        console.log('Usuario rechazó instalar la PWA');
+        console.log('❌ Usuario rechazó instalar la PWA');
       }
       // We've used the prompt, and can't use it again, throw it away
       deferredPrompt = null;
@@ -122,8 +150,47 @@ function showInstallButton() {
   });
   
   document.body.appendChild(installButton);
-  console.log('Botón de instalación mostrado');
+  console.log('✅ Botón de instalación añadido al DOM');
 }
+
+// Añade un botón de instalación manual para forzar la prueba
+// Esto es solo para depuración, puedes eliminarlo después
+function addDebugInstallButton() {
+  console.log('Añadiendo botón de instalación de depuración...');
+  const debugButton = document.createElement('button');
+  debugButton.textContent = 'Forzar Instalación (Debug)';
+  debugButton.style.position = 'fixed';
+  debugButton.style.bottom = '70px';
+  debugButton.style.right = '20px';
+  debugButton.style.backgroundColor = '#a33';
+  debugButton.style.color = '#fff';
+  debugButton.style.border = 'none';
+  debugButton.style.padding = '10px 16px';
+  debugButton.style.borderRadius = '4px';
+  debugButton.style.cursor = 'pointer';
+  debugButton.style.zIndex = '9999';
+  
+  debugButton.addEventListener('click', () => {
+    console.log('Botón de depuración clickeado');
+    alert('Verificando estado de instalación...\n\n' + 
+          '- URL: ' + window.location.href + '\n' +
+          '- ¿Modo standalone?: ' + window.matchMedia('(display-mode: standalone)').matches + '\n' +
+          '- ¿Service Worker?: ' + ('serviceWorker' in navigator) + '\n' +
+          '- ¿Evento beforeinstallprompt capturado?: ' + (deferredPrompt !== null));
+    
+    // Forzar mostrar el botón de instalación
+    showInstallButton();
+  });
+  
+  document.body.appendChild(debugButton);
+  console.log('✅ Botón de depuración añadido al DOM');
+}
+
+// Ejecutar después de cargar la página
+window.addEventListener('load', () => {
+  // Añadir botón de depuración después de 2 segundos
+  setTimeout(addDebugInstallButton, 2000);
+});
 
 // Log when the app is installed
 window.addEventListener('appinstalled', (evt) => {
