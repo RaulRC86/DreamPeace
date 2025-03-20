@@ -1,5 +1,5 @@
 // Cache name
-const CACHE_NAME = 'despertador-v1';
+const CACHE_NAME = 'DreamPeace-v1';
 
 // Files to cache
 const urlsToCache = [

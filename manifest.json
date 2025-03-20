@@ -1,6 +1,6 @@
 {
-    "name": "Despertador",
-    "short_name": "Alarma",
+    "name": "DreamPeace",
+    "short_name": "DreamPeace",
     "description": "Una aplicación simple de alarma para despertar a tiempo",
     "id": "/DreamPeace/",
     "start_url": "/DreamPeace/",

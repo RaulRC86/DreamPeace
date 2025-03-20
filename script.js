@@ -109,7 +109,7 @@ function showInstallButton() {
   }
   
   const installButton = document.createElement('button');
-  installButton.textContent = 'Instalar Despertador';
+  installButton.textContent = 'Instalar DreamPeace';
   installButton.className = 'install-btn';
   installButton.style.position = 'fixed';
   installButton.style.bottom = '20px';
