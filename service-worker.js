@@ -1,5 +1,5 @@
-// Cache name
-const CACHE_NAME = 'DreamPeace-v1';
+// Cache name - cambia la versión para forzar actualización
+const CACHE_NAME = 'dreampeace-v2'; // Incrementa la versión
 
 // Files to cache
 const urlsToCache = [
@@ -16,6 +16,9 @@ const urlsToCache = [
 self.addEventListener('install', event => {
   console.log('Service Worker: Installing...');
   
+  // Skip waiting para activar inmediatamente
+  self.skipWaiting();
+  
   // Perform install steps
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -25,7 +28,6 @@ self.addEventListener('install', event => {
       })
       .then(() => {
         console.log('Service Worker: All Files Cached');
-        return self.skipWaiting();
       })
       .catch(error => {
         console.error('Service Worker: Cache Failed', error);
@@ -60,40 +62,28 @@ self.addEventListener('fetch', event => {
   console.log('Service Worker: Fetching', event.request.url);
   
   event.respondWith(
-    // Try the cache first
-    caches.match(event.request)
+    // Try the network first, then fall back to cache
+    fetch(event.request)
       .then(response => {
-        // Cache hit - return response
-        if (response) {
-          console.log('Service Worker: Found in Cache', event.request.url);
+        // Check if we received a valid response
+        if (!response || response.status !== 200 || response.type !== 'basic') {
           return response;
         }
         
-        // Not in cache - fetch from network
-        console.log('Service Worker: Not in Cache, Fetching', event.request.url);
-        return fetch(event.request)
-          .then(response => {
-            // Check if we received a valid response
-            if (!response || response.status !== 200 || response.type !== 'basic') {
-              return response;
-            }
-            
-            // Clone the response
-            var responseToCache = response.clone();
-            
-            // Add to cache for next time
-            caches.open(CACHE_NAME)
-              .then(cache => {
-                cache.put(event.request, responseToCache);
-                console.log('Service Worker: New Resource Cached', event.request.url);
-              });
-              
-            return response;
-          })
-          .catch(error => {
-            console.error('Service Worker: Fetch Failed', error);
-            // You could return a custom offline page here
+        // Clone the response
+        var responseToCache = response.clone();
+        
+        // Add to cache for next time
+        caches.open(CACHE_NAME)
+          .then(cache => {
+            cache.put(event.request, responseToCache);
           });
+          
+        return response;
+      })
+      .catch(() => {
+        // If network fails, try the cache
+        return caches.match(event.request);
       })
   );
 });

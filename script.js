@@ -60,11 +60,11 @@ function triggerAlarma() {
 
   if ('Notification' in window) {
     if (Notification.permission === 'granted') {
-      new Notification('¡Es hora de despertar!');
+      new Notification('¡DreamPeace: Es hora de despertar!');
     } else if (Notification.permission !== 'denied') {
       Notification.requestPermission().then(permission => {
         if (permission === 'granted') {
-          new Notification('¡Es hora de despertar!');
+          new Notification('¡DreamPeace: Es hora de despertar!');
         }
       });
     }
@@ -77,6 +77,9 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./service-worker.js')
       .then(registration => {
         console.log('Service Worker registrado correctamente:', registration.scope);
+        
+        // Forzar actualización del Service Worker
+        registration.update();
       })
       .catch(error => {
         console.error('Error al registrar Service Worker:', error);
@@ -91,7 +94,6 @@ window.addEventListener('beforeinstallprompt', (e) => {
   // Store the event so it can be triggered later
   deferredPrompt = e;
   console.log('✅ Evento beforeinstallprompt capturado');
-  console.log('Detalles del evento:', e);
   
   // Show the install button
   showInstallButton();
@@ -106,6 +108,13 @@ function showInstallButton() {
   if (existingButton) {
     existingButton.remove();
     console.log('Botón existente eliminado');
+  }
+  
+  // Eliminar también el botón de depuración si existe
+  const debugButton = document.querySelector('.debug-btn');
+  if (debugButton) {
+    debugButton.remove();
+    console.log('Botón de depuración eliminado');
   }
   
   const installButton = document.createElement('button');
@@ -153,10 +162,15 @@ function showInstallButton() {
   console.log('✅ Botón de instalación añadido al DOM');
 }
 
-// Añade un botón de instalación manual para forzar la prueba
-
-
-
+// Eliminar cualquier botón de depuración existente al cargar la página
+window.addEventListener('load', () => {
+  // Buscar y eliminar botones de depuración
+  const debugButtons = document.querySelectorAll('.debug-btn, button:contains("Forzar Instalación")');
+  debugButtons.forEach(button => {
+    button.remove();
+    console.log('Botón de depuración eliminado al cargar');
+  });
+});
 
 // Log when the app is installed
 window.addEventListener('appinstalled', (evt) => {
