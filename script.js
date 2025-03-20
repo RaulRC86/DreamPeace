@@ -154,37 +154,7 @@ function showInstallButton() {
 }
 
 // Añade un botón de instalación manual para forzar la prueba
-// Esto es solo para depuración, puedes eliminarlo después
-function addDebugInstallButton() {
-  console.log('Añadiendo botón de instalación de depuración...');
-  const debugButton = document.createElement('button');
-  debugButton.textContent = 'Forzar Instalación (Debug)';
-  debugButton.style.position = 'fixed';
-  debugButton.style.bottom = '70px';
-  debugButton.style.right = '20px';
-  debugButton.style.backgroundColor = '#a33';
-  debugButton.style.color = '#fff';
-  debugButton.style.border = 'none';
-  debugButton.style.padding = '10px 16px';
-  debugButton.style.borderRadius = '4px';
-  debugButton.style.cursor = 'pointer';
-  debugButton.style.zIndex = '9999';
-  
-  debugButton.addEventListener('click', () => {
-    console.log('Botón de depuración clickeado');
-    alert('Verificando estado de instalación...\n\n' + 
-          '- URL: ' + window.location.href + '\n' +
-          '- ¿Modo standalone?: ' + window.matchMedia('(display-mode: standalone)').matches + '\n' +
-          '- ¿Service Worker?: ' + ('serviceWorker' in navigator) + '\n' +
-          '- ¿Evento beforeinstallprompt capturado?: ' + (deferredPrompt !== null));
-    
-    // Forzar mostrar el botón de instalación
-    showInstallButton();
-  });
-  
-  document.body.appendChild(debugButton);
-  console.log('✅ Botón de depuración añadido al DOM');
-}
+
 
 // Ejecutar después de cargar la página
 window.addEventListener('load', () => {
