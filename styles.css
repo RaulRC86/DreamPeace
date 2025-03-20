@@ -9,6 +9,7 @@
     background-color: #1a1a1a;
     color: #e0e0e0;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
@@ -97,9 +98,12 @@
   .install-btn:hover {
     background-color: #555;
   }
+
+  footer {color: white;}
   
   @media (max-width: 480px) {
     .clock {
       font-size: 2.5rem;
     }
   }
+
